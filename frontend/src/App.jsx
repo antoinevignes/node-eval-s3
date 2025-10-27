@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 
 function App() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [furnitures, setFurnitures] = useState([]);
 
   useEffect(() => {
     async function getFurnitures() {
-      const response = await fetch(`http://localhost:8000/furniture`);
+      const response = await fetch(`${API_URL}/furniture`);
 
       const data = await response.json();
 
@@ -27,13 +28,17 @@ function App() {
             <div key={f._id} className="shadow-md p-6 rounded-lg space-y-2">
               <h4 className="font-semibold text-lg">{f.name}</h4>
 
-              <p>Catégorie : {f.category.name}</p>
+              <p>Catégorie: {f.category.name}</p>
 
               <div>
-                <p>Matériaux :</p>
-                <ul>
+                <ul className="flex items-center gap-2">
                   {f.materials.map((m) => (
-                    <li key={m._id}>{m.name}</li>
+                    <li
+                      key={m._id}
+                      className="bg-blue-500 rounded-lg px-2 py-1 text-white"
+                    >
+                      {m.name}
+                    </li>
                   ))}
                 </ul>
               </div>
