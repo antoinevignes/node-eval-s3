@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 
@@ -27,4 +28,29 @@ export async function register(req, res) {
   } catch (error) {
     res.status(500).json({ message: err.message });
   }
+}
+
+export async function login(req, res) {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password)
+      return res.status(400).json({ message: "Tous les champs sont requis" });
+
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(404).json({ message: "Utilisateur introuvable" });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+      return res.status(400).json({ message: "Mot de passe invalide" });
+
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({ message: "Connexion réussie", token });
+  } catch (error) {}
 }

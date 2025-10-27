@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import router from "./routes/index.js";
+import { verifyToken } from "./middlewares/authMiddleware.js";
 
 dotenv.config();
 const { PORT, MONGO_URL } = process.env;
@@ -18,5 +19,9 @@ try {
 }
 
 app.use(router);
+
+app.get("/api/profile", verifyToken, (req, res) => {
+  res.json({ message: `Bienvenue ${req.user.email}` });
+});
 
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
