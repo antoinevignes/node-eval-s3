@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 
 export default function FurnitureDetails() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -35,7 +35,7 @@ export default function FurnitureDetails() {
                   key={m._id}
                   className="bg-blue-500 rounded-lg px-2 py-1 text-white"
                 >
-                  {m.name}
+                  <Link to={`/material/${m._id}`}>{m.name}</Link>
                 </li>
               ))}
             </ul>
