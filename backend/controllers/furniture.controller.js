@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Furniture from "../models/furniture.model.js";
 import FurnitureMaterial from "../models/furniture_material.model.js";
 
@@ -80,6 +81,72 @@ export async function getFurnitures(_, res) {
     res.status(200).json(furnitures);
   } catch (err) {
     console.error("Erreur récupération meubles:", err);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+}
+
+export async function getFurnitureById(req, res) {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "ID invalide" });
+    }
+
+    const furniture = await Furniture.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_id",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      { $unwind: "$category" },
+      {
+        $lookup: {
+          from: "furniture_materials",
+          localField: "_id",
+          foreignField: "furniture_id",
+          as: "furniture_materials",
+        },
+      },
+      {
+        $lookup: {
+          from: "materials",
+          localField: "furniture_materials.material_id",
+          foreignField: "_id",
+          as: "materials",
+        },
+      },
+      {
+        $lookup: {
+          from: "companies",
+          localField: "materials.company_id",
+          foreignField: "_id",
+          as: "companies",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          created_at: 1,
+          category: { name: 1, _id: 1 },
+          materials: { name: 1, type: 1, _id: 1 },
+          companies: { name: 1, _id: 1 },
+        },
+      },
+    ]);
+
+    if (!furniture || furniture.length === 0) {
+      return res.status(404).json({ message: "Meuble non trouvé" });
+    }
+
+    res.status(200).json(furniture[0]);
+  } catch (error) {
+    console.error("Erreur récupération meuble:", error);
     res.status(500).json({ message: "Erreur serveur" });
   }
 }
