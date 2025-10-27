@@ -23,7 +23,7 @@ export default function FurnitureDetails() {
   return (
     <>
       {furniture && (
-        <section className="flex flex-col justify-center items-center h-screen space-y-4">
+        <section className="flex flex-col justify-center items-center h-[80vh] space-y-4">
           <h1 className="text-2xl font-bold">{furniture.name}</h1>
 
           <p>Catégorie : {furniture.category?.name}</p>

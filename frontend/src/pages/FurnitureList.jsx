@@ -20,9 +20,7 @@ export default function FurnitureList() {
   console.log(furnitures);
 
   return (
-    <section className="grid grid-cols-12 p-20">
-      <h1 className="col-start-6 col-span-4 font-bold text-2xl">Mes meubles</h1>
-
+    <section className="grid grid-cols-12">
       <div className="col-span-12 col-start-2 col-end-12 grid grid-cols-2 gap-4 mt-10">
         {furnitures &&
           furnitures.map((f) => (
