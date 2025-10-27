@@ -10,6 +10,12 @@ export async function addFurniture(req, res) {
       return res.status(400).json({ message: "Tous les champs sont requis" });
     }
 
+    const existingFurniture = await Furniture.findOne({ name });
+    if (existingFurniture)
+      return res.status(400).json({
+        message: "Ce meuble existe déjà, veuillez en augmenter la quantité",
+      });
+
     const furniture = await Furniture.create({ name, category_id });
 
     if (materials && Array.isArray(materials)) {
