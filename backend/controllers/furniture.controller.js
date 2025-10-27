@@ -1,8 +1,5 @@
 import Furniture from "../models/furniture.model.js";
 import FurnitureMaterial from "../models/furniture_material.model.js";
-// import "../models/category.model.js";
-// import "../models/company.model.js";
-// import "../models/material.model.js";
 
 export async function addFurniture(req, res) {
   try {
