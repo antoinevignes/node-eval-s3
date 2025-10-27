@@ -1,52 +1,12 @@
-import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router";
+import FurnitureList from "./pages/FurnitureList";
+import FurnitureDetails from "./pages/FurnitureDetails";
 
-function App() {
-  const API_URL = import.meta.env.VITE_API_URL;
-  const [furnitures, setFurnitures] = useState([]);
-
-  useEffect(() => {
-    async function getFurnitures() {
-      const response = await fetch(`${API_URL}/furniture`);
-
-      const data = await response.json();
-
-      setFurnitures(data);
-    }
-
-    getFurnitures();
-  }, []);
-
-  console.log(furnitures);
-
+export default function App() {
   return (
-    <section className="grid grid-cols-12 p-20">
-      <h1 className="col-start-6 col-span-4 font-bold text-2xl">Mes meubles</h1>
-
-      <div className="col-span-12 col-start-2 col-end-12 grid grid-cols-2 gap-4 mt-10">
-        {furnitures &&
-          furnitures.map((f) => (
-            <div key={f._id} className="shadow-md p-6 rounded-lg space-y-2">
-              <h4 className="font-semibold text-lg">{f.name}</h4>
-
-              <p>Catégorie: {f.category.name}</p>
-
-              <div>
-                <ul className="flex items-center gap-2">
-                  {f.materials.map((m) => (
-                    <li
-                      key={m._id}
-                      className="bg-blue-500 rounded-lg px-2 py-1 text-white"
-                    >
-                      {m.name}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
-      </div>
-    </section>
+    <Routes>
+      <Route path="/" element={<FurnitureList />} />
+      <Route path="/:id" element={<FurnitureDetails />} />
+    </Routes>
   );
 }
-
-export default App;
