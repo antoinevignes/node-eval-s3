@@ -34,7 +34,7 @@ export default function FurnitureDetails() {
                 <li key={m._id}>
                   <Link
                     to={`/material/${m._id}`}
-                    className="bg-blue-500 rounded-lg px-2 py-1 text-white"
+                    className="bg-blue-500 rounded-lg px-2 py-1 text-white hover:bg-black transition-all"
                   >
                     {m.name}
                   </Link>

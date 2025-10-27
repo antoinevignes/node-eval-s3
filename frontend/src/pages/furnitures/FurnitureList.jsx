@@ -27,7 +27,7 @@ export default function FurnitureList() {
             <Link
               to={`/${f._id}`}
               key={f._id}
-              className="shadow-md flex flex-col items-center p-6 rounded-lg space-y-2"
+              className="shadow-md flex flex-col items-center p-6 rounded-lg space-y-2 hover:shadow-lg transition-all"
             >
               <h4 className="font-semibold text-lg">{f.name}</h4>
 
