@@ -18,8 +18,6 @@ export default function MaterialDetail() {
     getMaterial();
   }, []);
 
-  console.log(material);
-
   return (
     <>
       {material && (

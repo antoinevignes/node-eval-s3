@@ -31,11 +31,13 @@ export default function FurnitureDetails() {
           <div>
             <ul className="flex items-center gap-2">
               {furniture.materials?.map((m) => (
-                <li
-                  key={m._id}
-                  className="bg-blue-500 rounded-lg px-2 py-1 text-white"
-                >
-                  <Link to={`/material/${m._id}`}>{m.name}</Link>
+                <li key={m._id}>
+                  <Link
+                    to={`/material/${m._id}`}
+                    className="bg-blue-500 rounded-lg px-2 py-1 text-white"
+                  >
+                    {m.name}
+                  </Link>
                 </li>
               ))}
             </ul>
