@@ -3,6 +3,7 @@ import FurnitureList from "./pages/furnitures/FurnitureList";
 import FurnitureDetails from "./pages/furnitures/FurnitureDetails";
 import MainLayout from "./layout/MainLayout";
 import MaterialDetail from "./pages/materials/MaterialDetail";
+import Login from "./pages/auth/Login";
 
 export default function App() {
   return (
@@ -12,6 +13,8 @@ export default function App() {
         <Route path="/:id" element={<FurnitureDetails />} />
         <Route path="/material/:id" element={<MaterialDetail />} />
       </Route>
+
+      <Route path="/user/login" element={<Login />} />
     </Routes>
   );
 }
