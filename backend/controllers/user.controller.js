@@ -39,18 +39,24 @@ export async function login(req, res) {
 
     const user = await User.findOne({ email });
     if (!user)
-      return res.status(404).json({ message: "Utilisateur introuvable" });
+      return res
+        .status(404)
+        .json({ message: "Email ou mot de passe incorrect" });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
-      return res.status(400).json({ message: "Mot de passe invalide" });
+      return res
+        .status(400)
+        .json({ message: "Email ou mot de passe incorrect" });
 
     const token = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     res.json({ message: "Connexion réussie", token });
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json({ message: err.message });
+  }
 }

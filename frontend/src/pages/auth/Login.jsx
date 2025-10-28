@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Login() {
-  const navigate = useNavigate();
-  const [error, setError] = useState("");
   const API_URL = import.meta.env.VITE_API_URL;
+  const { login } = useContext(AuthContext);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (formData) => {
     const email = formData.get("email");
@@ -30,8 +30,7 @@ export default function Login() {
 
       const data = await response.json();
 
-      localStorage.setItem("token", data.token);
-      navigate("/");
+      login(data.token);
     } catch (err) {
       console.error(err);
       setError("Erreur serveur");
