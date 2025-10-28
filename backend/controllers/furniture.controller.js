@@ -157,3 +157,30 @@ export async function getFurnitureById(req, res) {
     res.status(500).json({ message: "Erreur serveur" });
   }
 }
+
+export async function updateQtyById(req, res) {
+  try {
+    const { id } = req.params;
+    const { qty } = req.body;
+
+    if (typeof qty !== "number") {
+      return res.status(400).json({ message: "qty doit être un nombre" });
+    }
+
+    const furniture = await Furniture.findById(id);
+    if (!furniture) {
+      return res.status(404).json({ message: "Meuble non trouvé" });
+    }
+
+    furniture.qty = qty;
+    await furniture.save();
+
+    res.status(200).json({
+      message: `Quantité mise à jour`,
+      quantity: furniture.qty,
+    });
+  } catch (err) {
+    console.error("Erreur MAJ quantité:", err);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+}

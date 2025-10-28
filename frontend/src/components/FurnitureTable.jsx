@@ -1,24 +1,13 @@
 import { useEffect, useState } from "react";
 import { Eye } from "lucide-react";
 import { Link } from "react-router";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function FurnitureTable() {
   const API_URL = import.meta.env.VITE_API_URL;
+  const { user } = useContext(AuthContext);
   const [furnitures, setFurnitures] = useState([]);
-
-  const increaseQuantity = (id) => {
-    setFurnitures((prev) =>
-      prev.map((f) => (f._id === id ? { ...f, qty: (f.qty || 0) + 1 } : f))
-    );
-  };
-
-  const decreaseQuantity = (id) => {
-    setFurnitures((prev) =>
-      prev.map((f) =>
-        f._id === id ? { ...f, qty: Math.max((f.qty || 0) - 1, 0) } : f
-      )
-    );
-  };
 
   useEffect(() => {
     async function getFurnitures() {
@@ -40,6 +29,21 @@ export default function FurnitureTable() {
 
     getFurnitures();
   }, [API_URL]);
+
+  const updateQty = async (id, qty) => {
+    setFurnitures((prev) =>
+      prev.map((f) => (f._id === id ? { ...f, qty: qty || 0 } : f))
+    );
+
+    await fetch(`${API_URL}/furniture/${id}/qty`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user}`,
+      },
+      body: JSON.stringify({ qty }),
+    });
+  };
 
   console.log(furnitures);
 
@@ -88,7 +92,7 @@ export default function FurnitureTable() {
 
                     <td className="px-6 py-4 text-right space-x-4">
                       <button
-                        onClick={() => decreaseQuantity(f._id)}
+                        onClick={() => updateQty(f._id, f.qty - 1)}
                         className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 transition"
                       >
                         -
@@ -97,7 +101,7 @@ export default function FurnitureTable() {
                       <span className="min-w-8 text-center">{f.qty || 0}</span>
 
                       <button
-                        onClick={() => increaseQuantity(f._id)}
+                        onClick={() => updateQty(f._id, f.qty + 1)}
                         className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
                       >
                         +
