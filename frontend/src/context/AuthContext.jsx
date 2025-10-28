@@ -6,10 +6,12 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) setUser(token);
+    setLoading(false);
   }, []);
 
   const login = useCallback((token) => {
@@ -24,7 +26,7 @@ export function AuthProvider({ children }) {
     navigate("/");
   }, []);
 
-  const values = { user, login, logout };
+  const values = { user, login, logout, loading };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 }
