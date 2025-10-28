@@ -4,11 +4,12 @@ import {
   getMaterialUsageByCompany,
   getMaterialUsageByType,
 } from "../controllers/stats.controller.js";
+import { verifyToken } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.get("/by-material", getMaterialUsage);
-router.get("/by-type", getMaterialUsageByType);
-router.get("/by-company", getMaterialUsageByCompany);
+router.get("/by-material", verifyToken, getMaterialUsage);
+router.get("/by-type", verifyToken, getMaterialUsageByType);
+router.get("/by-company", verifyToken, getMaterialUsageByCompany);
 
 export default router;

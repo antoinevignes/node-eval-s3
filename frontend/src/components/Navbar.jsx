@@ -9,6 +9,7 @@ export default function Navbar() {
       <Link to="/" className="font-bold text-lg">
         🏠 Meubles
       </Link>
+
       <div className="flex gap-4">
         {!user ? (
           <Link to="/user/login" className="hover:text-blue-400 transition-all">
@@ -22,6 +23,7 @@ export default function Navbar() {
             >
               Dashboard
             </Link>
+
             <button
               onClick={logout}
               className="hover:text-blue-400 transition-all"
