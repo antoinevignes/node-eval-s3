@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router";
 
 export default function Login() {
   const API_URL = import.meta.env.VITE_API_URL;
-
   const { login } = useContext(AuthContext);
   const [searchParams] = useSearchParams();
   const searchParamsErr = searchParams.get("error");
@@ -20,13 +19,8 @@ export default function Login() {
     try {
       const response = await fetch(`${API_URL}/user/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -36,7 +30,6 @@ export default function Login() {
       }
 
       const data = await response.json();
-
       login(data.token);
     } catch (err) {
       console.error(err);
@@ -45,34 +38,66 @@ export default function Login() {
   };
 
   return (
-    <section className="p-20 flex flex-col justify-center items-center h-screen">
-      <h1 className="font-bold text-2xl mb-6">Se connecter</h1>
+    <section className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-md bg-white shadow-md rounded-2xl border border-gray-100 p-8 space-y-6">
+        <div className="text-center space-y-1">
+          <h1 className="text-2xl font-bold text-gray-900">Connexion admin</h1>
+          <p className="text-sm text-gray-500">
+            Entrez vos identifiants pour continuer
+          </p>
+        </div>
 
-      <form
-        action={handleSubmit}
-        method="post"
-        className="flex flex-col justify-center items-center space-y-2"
-      >
-        <input
-          type="email"
-          name="email"
-          className="border border-black rounded-lg px-2 py-1"
-          placeholder="Email"
-        />
-        <input
-          type="password"
-          name="password"
-          className="border border-black rounded-lg px-2 py-1"
-          placeholder="Mot de passe"
-        />
-        <input
-          type="submit"
-          value="Se connecter"
-          className="bg-black text-white px-2 py-1 rounded-lg border border-black hover:bg-white hover:text-black transition-all cursor-pointer"
-        />
+        <form
+          action={handleSubmit}
+          method="post"
+          className="flex flex-col space-y-4"
+        >
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              placeholder="exemple@email.com"
+            />
+          </div>
 
-        {error && <p className="text-red-500">{error}</p>}
-      </form>
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Mot de passe
+            </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              placeholder="••••••••"
+            />
+          </div>
+
+          {error && (
+            <p className="text-red-500 text-sm text-center font-medium bg-red-50 border border-red-100 py-2 rounded-lg">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-sm hover:shadow-md"
+          >
+            Se connecter
+          </button>
+        </form>
+      </div>
     </section>
   );
 }
