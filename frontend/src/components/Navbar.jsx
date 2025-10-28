@@ -11,13 +11,24 @@ export default function Navbar() {
       </Link>
       <div className="flex gap-4">
         {!user ? (
-          <Link to="/user/login" className="hover:text-blue-400">
+          <Link to="/user/login" className="hover:text-blue-400 transition-all">
             Login
           </Link>
         ) : (
-          <button onClick={logout} className="hover:text-blue-400">
-            Logout
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              to="/admin/dashboard"
+              className="hover:text-blue-400 transition-all"
+            >
+              Dashboard
+            </Link>
+            <button
+              onClick={logout}
+              className="hover:text-blue-400 transition-all"
+            >
+              Logout
+            </button>
+          </div>
         )}
       </div>
     </nav>

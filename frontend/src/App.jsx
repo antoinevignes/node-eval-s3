@@ -4,6 +4,7 @@ import FurnitureDetails from "./pages/furnitures/FurnitureDetails";
 import MainLayout from "./layout/MainLayout";
 import MaterialDetail from "./pages/materials/MaterialDetail";
 import Login from "./pages/auth/Login";
+import Dashboard from "./pages/admin/Dashboard";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
       </Route>
 
       <Route path="/user/login" element={<Login />} />
+      <Route path="/admin/dashboard" element={<Dashboard />} />
     </Routes>
   );
 }

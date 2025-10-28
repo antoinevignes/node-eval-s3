@@ -1,10 +1,17 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { useSearchParams } from "react-router";
 
 export default function Login() {
   const API_URL = import.meta.env.VITE_API_URL;
+
   const { login } = useContext(AuthContext);
-  const [error, setError] = useState("");
+  const [searchParams] = useSearchParams();
+  const searchParamsErr = searchParams.get("error");
+
+  const [error, setError] = useState(
+    searchParamsErr ? "Vous devez vous connecter pour continuer" : ""
+  );
 
   const handleSubmit = async (formData) => {
     const email = formData.get("email");
