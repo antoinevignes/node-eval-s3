@@ -77,6 +77,7 @@ export async function getFurnitures(_, res) {
           _id: 1,
           name: 1,
           created_at: 1,
+          qty: 1,
           category: { name: 1, _id: 1 },
           materials: { name: 1, type: 1, _id: 1 },
           companies: { name: 1, _id: 1 },
