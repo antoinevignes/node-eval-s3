@@ -65,7 +65,7 @@ export default function FurnitureTable() {
                       <Link to={`/${f._id}`}>
                         <Eye size={20} />
                       </Link>
-                      <Link to={`/furniture/update/${f._id}`}>
+                      <Link to={`/admin/furniture/update/${f._id}`}>
                         <SquarePen size={20} />
                       </Link>
                     </td>

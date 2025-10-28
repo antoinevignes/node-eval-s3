@@ -4,46 +4,81 @@ import { Link, useParams } from "react-router";
 export default function FurnitureDetails() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { id } = useParams();
-  const [furniture, setFurniture] = useState({});
+  const [furniture, setFurniture] = useState(null);
 
   useEffect(() => {
     async function getFurnitureById() {
-      const response = await fetch(`${API_URL}/furniture/${id}`);
-
-      const data = await response.json();
-
-      setFurniture(data);
+      try {
+        const response = await fetch(`${API_URL}/furniture/${id}`);
+        if (!response.ok) throw new Error("Erreur lors du chargement");
+        const data = await response.json();
+        setFurniture(data);
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     getFurnitureById();
-  }, []);
+  }, [API_URL, id]);
 
-  console.log(furniture);
+  if (!furniture) {
+    return (
+      <section className="flex justify-center items-center h-[80vh] text-gray-500">
+        Chargement en cours...
+      </section>
+    );
+  }
 
   return (
-    <>
-      {furniture && (
-        <section className="flex flex-col justify-center items-center h-[80vh] space-y-4">
-          <h1 className="text-2xl font-bold">{furniture.name}</h1>
+    <section className="min-h-[80vh] bg-gray-50 py-16 flex justify-center items-center">
+      <div className="max-w-3xl w-full bg-white rounded-2xl shadow-md border border-gray-100 p-10 space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            {furniture.name}
+          </h1>
+          <p className="text-gray-500 text-sm">
+            Catégorie :{" "}
+            <span className="font-medium text-gray-700">
+              {furniture.category?.name}
+            </span>
+          </p>
+        </div>
 
-          <p>Catégorie : {furniture.category?.name}</p>
+        <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+          <img
+            src={
+              furniture.image_url || "https://placehold.co/600x400?text=Meuble"
+            }
+            alt={furniture.name}
+            className="object-cover h-full w-full rounded-lg"
+          />
+        </div>
 
-          <div>
-            <ul className="flex items-center gap-2">
-              {furniture.materials?.map((m) => (
-                <li key={m._id}>
-                  <Link
-                    to={`/material/${m._id}`}
-                    className="bg-blue-500 rounded-lg px-2 py-1 text-white hover:bg-black transition-all"
-                  >
-                    {m.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      )}
-    </>
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            Matériaux utilisés :
+          </h2>
+          <ul className="flex flex-wrap gap-3">
+            {furniture.materials?.map((m) => (
+              <li key={m._id}>
+                <Link
+                  to={`/material/${m._id}`}
+                  className="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-600 hover:text-white transition-all shadow-sm"
+                >
+                  {m.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="text-sm text-gray-500 text-center pt-6 border-t border-gray-100">
+          Créé le{" "}
+          <span className="font-medium text-gray-700">
+            {new Date(furniture.created_at).toLocaleDateString()}
+          </span>
+        </div>
+      </div>
+    </section>
   );
 }

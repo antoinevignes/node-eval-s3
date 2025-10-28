@@ -4,33 +4,70 @@ import { useParams } from "react-router";
 export default function MaterialDetail() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { id } = useParams();
-  const [material, setMaterial] = useState({});
+  const [material, setMaterial] = useState(null);
 
   useEffect(() => {
     async function getMaterial() {
-      const response = await fetch(`${API_URL}/material/${id}`);
-
-      const data = await response.json();
-
-      setMaterial(data);
+      try {
+        const response = await fetch(`${API_URL}/material/${id}`);
+        if (!response.ok) throw new Error("Erreur de récupération");
+        const data = await response.json();
+        setMaterial(data);
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     getMaterial();
-  }, []);
+  }, [API_URL, id]);
+
+  if (!material) {
+    return (
+      <section className="flex justify-center items-center h-[80vh] text-gray-500">
+        Chargement du matériau...
+      </section>
+    );
+  }
 
   return (
-    <>
-      {material && (
-        <section className="flex flex-col justify-center items-center h-[80vh] space-y-4">
-          <h1 className="text-2xl font-bold">
-            {material.name} ({material.type})
-          </h1>
+    <section className="min-h-[80vh] bg-gray-50 py-16 flex justify-center items-center">
+      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-md border border-gray-100 p-10 space-y-6">
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold text-gray-900">{material.name}</h1>
+          <p className="text-gray-500 text-sm uppercase tracking-wide">
+            Type :{" "}
+            <span className="text-gray-700 font-semibold">{material.type}</span>
+          </p>
+        </div>
 
-          <p>Fabriqué par : {material.company_id?.name}</p>
+        <div className="w-full h-64 bg-gray-100 rounded-lg overflow-hidden flex justify-center items-center">
+          <img
+            src={
+              material.image_url ||
+              `https://placehold.co/600x400?text=${encodeURIComponent(
+                material.name
+              )}`
+            }
+            alt={material.name}
+            className="object-cover h-full w-full rounded-lg"
+          />
+        </div>
 
-          <p className="w-[50%]">"{material.description}"</p>
-        </section>
-      )}
-    </>
+        <div className="text-center">
+          <p className="text-gray-700">
+            Fabriqué par :{" "}
+            <span className="font-medium text-blue-600">
+              {material.company_id?.name}
+            </span>
+          </p>
+        </div>
+
+        {material.description && (
+          <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-600 text-center">
+            “{material.description}”
+          </blockquote>
+        )}
+      </div>
+    </section>
   );
 }

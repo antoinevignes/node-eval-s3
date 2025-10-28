@@ -5,6 +5,7 @@ import MainLayout from "./layout/MainLayout";
 import MaterialDetail from "./pages/materials/MaterialDetail";
 import Login from "./pages/auth/Login";
 import Dashboard from "./pages/admin/Dashboard";
+import UpdateFurniture from "./pages/admin/UpdateFurniture";
 
 export default function App() {
   return (
@@ -14,6 +15,10 @@ export default function App() {
         <Route path="/:id" element={<FurnitureDetails />} />
         <Route path="/material/:id" element={<MaterialDetail />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route
+          path="/admin/furniture/update/:id"
+          element={<UpdateFurniture />}
+        />
       </Route>
 
       <Route path="/user/login" element={<Login />} />
