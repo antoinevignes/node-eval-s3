@@ -8,18 +8,14 @@ export default function FurnitureTable() {
 
   const increaseQuantity = (id) => {
     setFurnitures((prev) =>
-      prev.map((f) =>
-        f._id === id ? { ...f, quantity: (f.quantity || 0) + 1 } : f
-      )
+      prev.map((f) => (f._id === id ? { ...f, qty: (f.qty || 0) + 1 } : f))
     );
   };
 
   const decreaseQuantity = (id) => {
     setFurnitures((prev) =>
       prev.map((f) =>
-        f._id === id
-          ? { ...f, quantity: Math.max((f.quantity || 0) - 1, 0) }
-          : f
+        f._id === id ? { ...f, qty: Math.max((f.qty || 0) - 1, 0) } : f
       )
     );
   };
