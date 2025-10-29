@@ -26,7 +26,6 @@ export default function FurnitureTable() {
         setFurnitures(data);
       } catch (err) {
         console.error("Erreur chargement meuble:", err);
-        setError(err.message || "Erreur serveur");
       }
     })();
   }, [API_URL]);
