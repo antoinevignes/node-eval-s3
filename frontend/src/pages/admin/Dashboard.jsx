@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 import CompanyDonut from "../../components/charts/CompanyDonut";
-import MaterialTypeDonut from "../../components/charts/MaterialTypeDonut";
+// import MaterialTypeDonut from "../../components/charts/MaterialTypeDonut";
 import { MaterialBarChart } from "../../components/charts/MaterialBarChart";
 import FurnitureTable from "../../components/FurnitureTable";
 
@@ -22,7 +22,7 @@ export default function Dashboard() {
 
       <CompanyDonut />
 
-      <MaterialTypeDonut />
+      {/* <MaterialTypeDonut /> */}
 
       <FurnitureTable />
     </section>

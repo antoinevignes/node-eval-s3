@@ -51,25 +51,39 @@ export async function getFurnitures(_, res) {
       {
         $lookup: {
           from: "furniture_materials",
-          localField: "_id",
-          foreignField: "furniture_id",
-          as: "furniture_materials",
-        },
-      },
-      {
-        $lookup: {
-          from: "materials",
-          localField: "furniture_materials.material_id",
-          foreignField: "_id",
+          let: { furnitureId: "$_id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$furniture_id", "$$furnitureId"] } } },
+            {
+              $lookup: {
+                from: "materials",
+                localField: "material_id",
+                foreignField: "_id",
+                as: "material",
+              },
+            },
+            { $unwind: "$material" },
+            {
+              $lookup: {
+                from: "companies",
+                localField: "material.company_id",
+                foreignField: "_id",
+                as: "company",
+              },
+            },
+            { $unwind: "$company" },
+            {
+              $project: {
+                _id: 0,
+                material_id: "$material._id",
+                material_name: "$material.name",
+                material_type: "$material.type",
+                qty: 1,
+                company_name: "$company.name",
+              },
+            },
+          ],
           as: "materials",
-        },
-      },
-      {
-        $lookup: {
-          from: "companies",
-          localField: "materials.company_id",
-          foreignField: "_id",
-          as: "companies",
         },
       },
       {
@@ -78,9 +92,8 @@ export async function getFurnitures(_, res) {
           name: 1,
           created_at: 1,
           qty: 1,
-          category: { name: 1, _id: 1 },
-          materials: { name: 1, type: 1, _id: 1 },
-          companies: { name: 1, _id: 1 },
+          category: { _id: 1, name: 1 },
+          materials: 1,
         },
       },
     ]);

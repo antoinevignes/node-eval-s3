@@ -11,6 +11,12 @@ const furnitureMaterialSchema = new mongoose.Schema({
     ref: "Material",
     required: true,
   },
+  qty: {
+    type: Number,
+    required: true,
+    default: 1,
+    min: 1,
+  },
 });
 
 export default mongoose.model(

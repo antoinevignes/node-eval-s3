@@ -84,7 +84,7 @@ export function MaterialBarChart() {
   }, [loading, user, API_URL]);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg col-span-3 p-10">
+    <div className="bg-white rounded-lg shadow-lg col-span-2 p-10">
       <Bar options={options} data={stats} />
     </div>
   );

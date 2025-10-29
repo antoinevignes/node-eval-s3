@@ -8,7 +8,7 @@ const furnitureSchema = new mongoose.Schema({
     required: true,
   },
   created_at: { type: Date, default: Date.now },
-  qty: { type: Number, default: 1 },
+  qty: { type: Number, default: 1, min: 1 },
 });
 
 export default mongoose.model("Furniture", furnitureSchema);
