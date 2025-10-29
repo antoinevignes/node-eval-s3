@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
   const login = useCallback((token) => {
     localStorage.setItem("token", token);
     setUser(token);
-    navigate("/");
+    navigate("/?success=true");
   }, []);
 
   const logout = useCallback(() => {

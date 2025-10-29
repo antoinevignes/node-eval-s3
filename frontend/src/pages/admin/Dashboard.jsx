@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import CompanyDonut from "../../components/charts/CompanyDonut";
 import { MaterialBarChart } from "../../components/charts/MaterialBarChart";
 import FurnitureTable from "../../components/FurnitureTable";
@@ -8,6 +8,9 @@ import FurnitureTable from "../../components/FurnitureTable";
 export default function Dashboard() {
   const navigate = useNavigate();
   const { user, loading } = useContext(AuthContext);
+  const [searchParams] = useSearchParams();
+
+  const success = searchParams.get("success");
 
   useEffect(() => {
     if (!user && !loading) {
@@ -22,6 +25,19 @@ export default function Dashboard() {
       <CompanyDonut />
 
       <FurnitureTable />
+
+      {success && (
+        <div
+          className="
+            bg-green-300 border border-green-500 
+            w-fit p-5 rounded-lg absolute bottom-10 right-10
+            shadow-lg text-green-900 font-medium
+            animate-slide-fade
+          "
+        >
+          <p>Meuble ajouté avec succès !</p>
+        </div>
+      )}
     </section>
   );
 }

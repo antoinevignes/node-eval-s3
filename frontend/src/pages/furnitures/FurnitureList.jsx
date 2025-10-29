@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 export default function FurnitureList() {
   const API_URL = import.meta.env.VITE_API_URL;
+  const [searchParams] = useSearchParams();
   const [furnitures, setFurnitures] = useState([]);
+
+  const success = searchParams.get("success");
 
   useEffect(() => {
     async function getFurnitures() {
@@ -14,8 +17,6 @@ export default function FurnitureList() {
 
     getFurnitures();
   }, [API_URL]);
-
-  console.log(furnitures);
 
   return (
     <section className="py-16">
@@ -72,6 +73,19 @@ export default function FurnitureList() {
           )}
         </div>
       </div>
+
+      {success && (
+        <div
+          className="
+            bg-green-300 border border-green-500 
+            w-fit p-5 rounded-lg absolute bottom-10 right-10
+            shadow-lg text-green-900 font-medium
+            animate-slide-fade
+          "
+        >
+          <p>Connecté !</p>
+        </div>
+      )}
     </section>
   );
 }

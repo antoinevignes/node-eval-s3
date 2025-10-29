@@ -1,9 +1,11 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router";
 
 export default function AddFurniture() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [error, setError] = useState("");
   const [materialsSelected, setMaterialsSelected] = useState([
@@ -51,7 +53,7 @@ export default function AddFurniture() {
         return;
       }
 
-      //   FAIRE UN NAVIGATE SUCCESS
+      navigate("/admin/dashboard?success=true");
     } catch (err) {
       console.error(err);
       setError("Erreur serveur");
