@@ -17,12 +17,16 @@ export default function FurnitureTable() {
       try {
         const response = await fetch(`${API_URL}/furniture`);
 
-        if (!response.ok) throw new Error("Erreur API meubles");
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.message);
+        }
 
         const data = await response.json();
         setFurnitures(data);
       } catch (err) {
-        console.error("Erreur chargement meubles :", err);
+        console.error("Erreur chargement meuble:", err);
+        setError(err.message || "Erreur serveur");
       }
     })();
   }, [API_URL]);
@@ -43,14 +47,15 @@ export default function FurnitureTable() {
         body: JSON.stringify({ qty }),
       });
 
-      if (!res.ok) {
-        console.error("Erreur MAJ quantité:", await res.text());
-        return;
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message);
       }
 
       refreshStats();
     } catch (err) {
       console.error("Erreur réseau:", err);
+      setError(err.message || "Erreur serveur");
     }
   };
 
