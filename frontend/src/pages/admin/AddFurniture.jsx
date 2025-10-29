@@ -1,10 +1,25 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 
+const categories = [
+  { id: "68ff4178c117aceec20a9300", name: "Armoires" },
+  { id: "68ff4187c117aceec20a9301", name: "Étagères" },
+];
+
+const materials = [
+  { id: "68ff3fa0c117aceec20a92e4", name: "Plastique" },
+  { id: "68ff4069c117aceec20a92ec", name: "Frêne" },
+  { id: "68ff40c5c117aceec20a92f1", name: "Chêne" },
+  { id: "68ff40e2c117aceec20a92f4", name: "Noyer" },
+  { id: "68ff40f1c117aceec20a92f5", name: "Acier" },
+  { id: "68ff4154c117aceec20a92fb", name: "Inox" },
+  { id: "68ff4160c117aceec20a92fc", name: "Aluminium" },
+];
+
 export default function AddFurniture() {
   const API_URL = import.meta.env.VITE_API_URL;
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [error, setError] = useState("");
@@ -12,20 +27,11 @@ export default function AddFurniture() {
     { id: "", qty: 1 },
   ]);
 
-  const categories = [
-    { id: "68ff4178c117aceec20a9300", name: "Armoires" },
-    { id: "68ff4187c117aceec20a9301", name: "Étagères" },
-  ];
-
-  const materials = [
-    { id: "68ff3fa0c117aceec20a92e4", name: "Plastique" },
-    { id: "68ff4069c117aceec20a92ec", name: "Frêne" },
-    { id: "68ff40c5c117aceec20a92f1", name: "Chêne" },
-    { id: "68ff40e2c117aceec20a92f4", name: "Noyer" },
-    { id: "68ff40f1c117aceec20a92f5", name: "Acier" },
-    { id: "68ff4154c117aceec20a92fb", name: "Inox" },
-    { id: "68ff4160c117aceec20a92fc", name: "Aluminium" },
-  ];
+  useEffect(() => {
+    if (!user && !loading) {
+      navigate("/user/login?error=not-connected");
+    }
+  }, [loading, user, navigate]);
 
   const handleSubmit = async (formData) => {
     const name = formData.get("name");
