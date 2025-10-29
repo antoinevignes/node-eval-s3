@@ -3,49 +3,55 @@ import { Eye } from "lucide-react";
 import { Link } from "react-router";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useStats } from "../context/StatsContext";
 
 export default function FurnitureTable() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { user } = useContext(AuthContext);
+  const { refreshStats } = useStats();
   const [furnitures, setFurnitures] = useState([]);
 
+  // FETCH INITIAL
   useEffect(() => {
-    async function getFurnitures() {
+    (async () => {
       try {
         const response = await fetch(`${API_URL}/furniture`);
-        const raw = await response.text();
+        if (!response.ok) throw new Error("Erreur API meubles");
 
-        if (!response.ok) {
-          console.error("Erreur", raw);
-          return;
-        }
-
-        const data = JSON.parse(raw);
+        const data = await response.json();
         setFurnitures(data);
       } catch (err) {
-        console.error(err);
+        console.error("Erreur chargement meubles :", err);
       }
-    }
-
-    getFurnitures();
+    })();
   }, [API_URL]);
 
+  // MAJ STATS & QTITE
   const updateQty = async (id, qty) => {
     setFurnitures((prev) =>
-      prev.map((f) => (f._id === id ? { ...f, qty: qty || 0 } : f))
+      prev.map((f) => (f._id === id ? { ...f, qty: Math.max(qty, 0) } : f))
     );
 
-    await fetch(`${API_URL}/furniture/${id}/qty`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user}`,
-      },
-      body: JSON.stringify({ qty }),
-    });
-  };
+    try {
+      const res = await fetch(`${API_URL}/furniture/${id}/qty`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user}`,
+        },
+        body: JSON.stringify({ qty }),
+      });
 
-  console.log(furnitures);
+      if (!res.ok) {
+        console.error("Erreur MAJ quantité:", await res.text());
+        return;
+      }
+
+      refreshStats();
+    } catch (err) {
+      console.error("Erreur réseau:", err);
+    }
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg col-span-3 p-10">
@@ -81,6 +87,10 @@ export default function FurnitureTable() {
             {furnitures.length > 0 ? (
               furnitures.map((f) => {
                 const date = new Date(f.created_at).toLocaleDateString();
+                const totalMaterials = f.materials?.reduce(
+                  (acc, curr) => acc + (curr.qty || 0),
+                  0
+                );
 
                 return (
                   <tr
@@ -90,11 +100,7 @@ export default function FurnitureTable() {
                     <td className="px-6 py-4 font-medium">{f.name}</td>
                     <td className="px-6 py-4">{f.category.name}</td>
                     <td className="px-6 py-4">{date}</td>
-                    <td className="px-6 py-4">
-                      {f.materials.reduce((acc, curr) => {
-                        return acc + curr.qty;
-                      }, 0)}
-                    </td>
+                    <td className="px-6 py-4">{totalMaterials}</td>
 
                     <td className="px-6 py-4 text-right space-x-4">
                       <button
