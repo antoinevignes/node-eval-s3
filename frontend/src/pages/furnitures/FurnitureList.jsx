@@ -5,18 +5,39 @@ export default function FurnitureList() {
   const API_URL = import.meta.env.VITE_API_URL;
   const [searchParams] = useSearchParams();
   const [furnitures, setFurnitures] = useState([]);
+  const [error, setError] = useState("");
 
   const success = searchParams.get("success");
 
   useEffect(() => {
     async function getFurnitures() {
-      const response = await fetch(`${API_URL}/furniture`);
-      const data = await response.json();
-      setFurnitures(data);
+      try {
+        const response = await fetch(`${API_URL}/furniture`);
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.message);
+        }
+
+        const data = await response.json();
+        setFurnitures(data);
+        setError("");
+      } catch (err) {
+        console.error("Erreur récupération liste meubles:", err);
+        setError(err.message || "Erreur serveur");
+      }
     }
 
     getFurnitures();
   }, [API_URL]);
+
+  if (error) {
+    return (
+      <section className="flex justify-center items-center h-screen text-red-500">
+        <p>{error}</p>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16">

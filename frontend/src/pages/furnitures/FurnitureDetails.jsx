@@ -5,21 +5,37 @@ export default function FurnitureDetails() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { id } = useParams();
   const [furniture, setFurniture] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function getFurnitureById() {
       try {
         const response = await fetch(`${API_URL}/furniture/${id}`);
-        if (!response.ok) throw new Error("Erreur lors du chargement");
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.message);
+        }
+
         const data = await response.json();
         setFurniture(data);
+        setError("");
       } catch (err) {
-        console.error(err);
+        console.error("Erreur récupération détails meubles:", err);
+        setError(err.message || "Erreur serveur");
       }
     }
 
     getFurnitureById();
   }, [API_URL, id]);
+
+  if (error) {
+    return (
+      <section className="flex justify-center items-center h-screen text-red-500">
+        <p>{error}</p>
+      </section>
+    );
+  }
 
   if (!furniture) {
     return (

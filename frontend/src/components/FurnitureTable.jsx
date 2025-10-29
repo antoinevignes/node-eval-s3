@@ -16,6 +16,7 @@ export default function FurnitureTable() {
     (async () => {
       try {
         const response = await fetch(`${API_URL}/furniture`);
+
         if (!response.ok) throw new Error("Erreur API meubles");
 
         const data = await response.json();

@@ -5,21 +5,37 @@ export default function MaterialDetail() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { id } = useParams();
   const [material, setMaterial] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function getMaterial() {
       try {
         const response = await fetch(`${API_URL}/material/${id}`);
-        if (!response.ok) throw new Error("Erreur de récupération");
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.message);
+        }
+
         const data = await response.json();
         setMaterial(data);
+        setError("");
       } catch (err) {
-        console.error(err);
+        console.error("Erreur récupération matériau:", err);
+        setError(err.message || "Erreur serveur");
       }
     }
 
     getMaterial();
   }, [API_URL, id]);
+
+  if (error) {
+    return (
+      <section className="flex justify-center items-center h-screen text-red-500">
+        <p>{error}</p>
+      </section>
+    );
+  }
 
   if (!material) {
     return (

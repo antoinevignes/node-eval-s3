@@ -48,15 +48,14 @@ export default function AddFurniture() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.message || "Erreur inconnue");
-        return;
+        const err = await response.json();
+        throw new Error(err.message);
       }
 
       navigate("/admin/dashboard?success=true");
     } catch (err) {
-      console.error(err);
-      setError("Erreur serveur");
+      console.error("Erreur ajout du meuble:", err);
+      setError(err.message || "Erreur serveur");
     }
   };
 

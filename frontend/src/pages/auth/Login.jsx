@@ -24,16 +24,16 @@ export default function Login() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.message || "Erreur inconnue");
-        return;
+        const err = await response.json();
+        throw new Error(err.message);
       }
 
       const data = await response.json();
       login(data.token);
+      setError("");
     } catch (err) {
       console.error(err);
-      setError("Erreur serveur");
+      setError(err.message || "Erreur serveur");
     }
   };
 
