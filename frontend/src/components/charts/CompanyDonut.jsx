@@ -31,12 +31,22 @@ export default function CompanyDonut() {
     ],
   };
 
+  if (companyStats.length === 0) {
+    return (
+      <div className="bg-white rounded-lg shadow-lg flex justify-center items-center p-10">
+        <span className="px-6 py-6 text-center text-gray-500 italic">
+          Aucune donnée correspondante
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-lg flex justify-center items-center p-10">
       {isRefreshing ? (
         <p className="text-gray-500 italic">Mise à jour...</p>
       ) : (
-        <Doughnut data={stats} />
+        <Doughnut data={stats} options={options} />
       )}
     </div>
   );

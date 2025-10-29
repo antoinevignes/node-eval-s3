@@ -46,6 +46,16 @@ export function MaterialBarChart() {
     ],
   };
 
+  if (materialStats.length === 0) {
+    return (
+      <div className="bg-white rounded-lg shadow-lg flex justify-center items-center p-10 col-span-2">
+        <span className="px-6 py-6 text-center text-gray-500 italic">
+          Aucune donnée correspondante
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-lg col-span-2 p-10">
       <Bar options={options} data={stats} />
