@@ -4,9 +4,19 @@ import FurnitureMaterial from "../models/furniture_material.model.js";
 
 export async function addFurniture(req, res) {
   try {
-    const { name, category_id, materials } = req.body;
+    const { name, category_id, materials, qty } = req.body;
 
-    if (!name || !category_id) {
+    if (
+      !name ||
+      name.trim() === "" ||
+      !category_id ||
+      category_id.trim() === "" ||
+      !materials ||
+      materials.length === 0 ||
+      !qty ||
+      typeof qty !== "number" ||
+      qty <= 0
+    ) {
       return res.status(400).json({ message: "Tous les champs sont requis" });
     }
 
@@ -16,20 +26,19 @@ export async function addFurniture(req, res) {
         message: "Ce meuble existe déjà, veuillez en augmenter la quantité",
       });
 
-    const furniture = await Furniture.create({ name, category_id });
+    const furniture = await Furniture.create({ name, category_id, qty });
 
     if (materials && Array.isArray(materials)) {
-      const relations = materials.map((material_id) => ({
+      const relations = materials.map((mat) => ({
         furniture_id: furniture._id,
-        material_id,
+        material_id: mat.material_id,
+        qty: mat.qty,
       }));
 
       await FurnitureMaterial.insertMany(relations);
     }
 
-    res
-      .status(201)
-      .json({ message: "Meuble et matériaux créés avec succès", furniture });
+    res.status(201).json({ message: "Meuble et matériaux créés avec succès" });
   } catch (error) {
     console.error("Erreur création meuble:", error);
     res.status(500).json({ message: "Erreur serveur" });
