@@ -15,6 +15,8 @@ export default function FurnitureList() {
     getFurnitures();
   }, [API_URL]);
 
+  console.log(furnitures);
+
   return (
     <section className="min-h-screen bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -24,10 +26,10 @@ export default function FurnitureList() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {furnitures.length > 0 ? (
-            furnitures.map((f) => (
+            furnitures.map((f, idx) => (
               <Link
                 to={`/${f._id}`}
-                key={f._id}
+                key={idx}
                 className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 p-6 flex flex-col space-y-4 hover:-translate-y-1"
               >
                 <div className="flex justify-between items-start">
@@ -44,12 +46,12 @@ export default function FurnitureList() {
                     Matériaux utilisés :
                   </h5>
                   <ul className="flex flex-wrap gap-2">
-                    {f.materials.map((m) => (
+                    {f.materials.map((m, idx) => (
                       <li
-                        key={m._id}
+                        key={idx}
                         className="bg-blue-100 text-blue-700 text-xs font-medium px-3 py-1 rounded-full"
                       >
-                        {m.name}
+                        {m.material_name}
                       </li>
                     ))}
                   </ul>
