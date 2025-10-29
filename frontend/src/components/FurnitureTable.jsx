@@ -46,7 +46,7 @@ export default function FurnitureTable() {
         body: JSON.stringify({ qty }),
       });
 
-      if (!response.ok) {
+      if (!res.ok) {
         const err = await response.json();
         throw new Error(err.message);
       }
@@ -54,7 +54,6 @@ export default function FurnitureTable() {
       refreshStats();
     } catch (err) {
       console.error("Erreur réseau:", err);
-      setError(err.message || "Erreur serveur");
     }
   };
 
