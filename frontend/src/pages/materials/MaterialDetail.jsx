@@ -30,7 +30,7 @@ export default function MaterialDetail() {
   }
 
   return (
-    <section className="min-h-[80vh] bg-gray-50 py-16 flex justify-center items-center">
+    <section className="min-h-[80vh] py-16 flex justify-center items-center">
       <div className="max-w-2xl w-full bg-white rounded-2xl shadow-md border border-gray-100 p-10 space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-gray-900">{material.name}</h1>

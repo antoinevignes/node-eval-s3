@@ -7,7 +7,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white border-b border-gray-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="mx-auto px-6 py-4 flex items-center justify-between">
         <Link
           to="/"
           className="flex items-center gap-2 text-gray-900 font-bold text-xl hover:text-blue-600 transition-colors"
