@@ -6,6 +6,7 @@ import MaterialDetail from "./pages/materials/MaterialDetail";
 import Login from "./pages/auth/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import AddFurniture from "./pages/admin/AddFurniture";
+import NotFound from "./pages/404/NotFound";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
       </Route>
 
       <Route path="/user/login" element={<Login />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
