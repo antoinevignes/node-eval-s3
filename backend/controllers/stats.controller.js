@@ -13,12 +13,26 @@ export async function getMaterialUsage(_, res) {
       },
       { $unwind: "$material" },
       {
+        $lookup: {
+          from: "furnitures",
+          localField: "furniture_id",
+          foreignField: "_id",
+          as: "furniture",
+        },
+      },
+      { $unwind: "$furniture" },
+      {
+        $addFields: {
+          totalForFurniture: { $multiply: ["$qty", "$furniture.qty"] },
+        },
+      },
+      {
         $group: {
           _id: {
             id: "$material._id",
             name: "$material.name",
           },
-          totalUsed: { $sum: "$qty" },
+          totalUsed: { $sum: "$totalForFurniture" },
         },
       },
       {
@@ -29,6 +43,7 @@ export async function getMaterialUsage(_, res) {
           totalUsed: 1,
         },
       },
+
       { $sort: { totalUsed: -1 } },
     ]);
 
@@ -88,6 +103,20 @@ export async function getMaterialUsageByCompany(_, res) {
       { $unwind: "$material" },
       {
         $lookup: {
+          from: "furnitures",
+          localField: "furniture_id",
+          foreignField: "_id",
+          as: "furniture",
+        },
+      },
+      { $unwind: "$furniture" },
+      {
+        $addFields: {
+          totalForFurniture: { $multiply: ["$qty", "$furniture.qty"] },
+        },
+      },
+      {
+        $lookup: {
           from: "companies",
           localField: "material.company_id",
           foreignField: "_id",
@@ -98,7 +127,7 @@ export async function getMaterialUsageByCompany(_, res) {
       {
         $group: {
           _id: "$company.name",
-          totalMaterialsUsed: { $sum: "$qty" },
+          totalMaterialsUsed: { $sum: "$totalForFurniture" },
         },
       },
       { $sort: { totalMaterialsUsed: -1 } },

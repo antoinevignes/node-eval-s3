@@ -71,6 +71,7 @@ export default function FurnitureTable() {
               <th className="px-6 py-3 font-medium">
                 Date de première création
               </th>
+              <th>Qtité de matériaux</th>
               <th className="px-6 py-3 font-medium text-right">Quantité</th>
               <th className="px-6 py-3 font-medium text-right">Détails</th>
             </tr>
@@ -89,6 +90,11 @@ export default function FurnitureTable() {
                     <td className="px-6 py-4 font-medium">{f.name}</td>
                     <td className="px-6 py-4">{f.category.name}</td>
                     <td className="px-6 py-4">{date}</td>
+                    <td className="px-6 py-4">
+                      {f.materials.reduce((acc, curr) => {
+                        return acc + curr.qty;
+                      }, 0)}
+                    </td>
 
                     <td className="px-6 py-4 text-right space-x-4">
                       <button
