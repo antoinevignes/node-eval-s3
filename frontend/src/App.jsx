@@ -17,14 +17,10 @@ export default function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<FurnitureList />} />
-          <Route path="/:id" element={<FurnitureDetails />} />
+          <Route path="/furniture/:id" element={<FurnitureDetails />} />
           <Route path="/material/:id" element={<MaterialDetail />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/furniture/add" element={<AddFurniture />} />
-          <Route
-            path="/admin/furniture/:id"
-            element={<AdminFurnitureDetails />}
-          />
           <Route
             path="/admin/furniture/:id"
             element={<AdminFurnitureDetails />}

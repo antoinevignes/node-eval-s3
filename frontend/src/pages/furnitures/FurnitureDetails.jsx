@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 
 export default function FurnitureDetails() {
   const API_URL = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
   const { id } = useParams();
   const [furniture, setFurniture] = useState(null);
   const [error, setError] = useState("");
@@ -88,11 +89,20 @@ export default function FurnitureDetails() {
           </ul>
         </div>
 
-        <div className="text-sm text-gray-500 text-center pt-6 border-t border-gray-100">
-          Créé le{" "}
-          <span className="font-medium text-gray-700">
-            {new Date(furniture.created_at).toLocaleDateString()}
-          </span>
+        <div className="flex items-center justify-between pt-6 border-t border-gray-100 text-sm text-gray-500">
+          <p>
+            Créé le{" "}
+            <span className="font-medium text-gray-700">
+              {new Date(furniture.created_at).toLocaleDateString()}
+            </span>
+          </p>
+
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-all"
+          >
+            ← Retour
+          </button>
         </div>
       </div>
     </section>

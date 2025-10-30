@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 export default function MaterialDetail() {
   const API_URL = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
   const { id } = useParams();
   const [material, setMaterial] = useState(null);
   const [error, setError] = useState("");
@@ -83,6 +84,15 @@ export default function MaterialDetail() {
             “{material.description}”
           </blockquote>
         )}
+
+        <div className="pt-6 border-t border-gray-100 text-sm text-gray-500 text-right">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-all"
+          >
+            ← Retour
+          </button>
+        </div>
       </div>
     </section>
   );

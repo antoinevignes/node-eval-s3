@@ -60,7 +60,7 @@ export default function FurnitureList() {
           {furnitures.length > 0 ? (
             furnitures.map((f, idx) => (
               <Link
-                to={`/${f._id}`}
+                to={`/furniture/${f._id}`}
                 key={idx}
                 className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 p-6 flex flex-col space-y-4 hover:-translate-y-1"
               >
