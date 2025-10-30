@@ -58,7 +58,7 @@ export default function AddFurniture() {
         throw new Error(err.message);
       }
 
-      navigate("/admin/dashboard?success=true");
+      navigate("/admin/dashboard", { state: { success: true } });
     } catch (err) {
       console.error("Erreur ajout du meuble:", err);
       setError(err.message || "Erreur serveur");

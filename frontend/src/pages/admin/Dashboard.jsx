@@ -1,22 +1,32 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate, useSearchParams } from "react-router";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
 import CompanyDonut from "../../components/charts/CompanyDonut";
 import { MaterialBarChart } from "../../components/charts/MaterialBarChart";
 import FurnitureTable from "../../components/FurnitureTable";
+import { toast } from "sonner";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const shownToast = useRef(false);
   const { user, loading } = useAuth();
-  const [searchParams] = useSearchParams();
 
-  const success = searchParams.get("success");
-
+  // Renvoi si pas connecté
   useEffect(() => {
     if (!user && !loading) {
       navigate("/user/login", { state: { error: true } });
     }
   }, [loading, user, navigate]);
+
+  // Toaster
+  useEffect(() => {
+    if (location.state?.success && !shownToast.current) {
+      shownToast.current = true;
+      toast.success("Meuble ajouté !");
+      navigate("/admin/dashboard", { replace: true, state: {} });
+    }
+  }, [location.state, navigate]);
 
   return (
     <section className="p-10 grid grid-cols-3 gap-4">
@@ -25,19 +35,6 @@ export default function Dashboard() {
       <CompanyDonut />
 
       <FurnitureTable />
-
-      {success && (
-        <div
-          className="
-            bg-green-300 border border-green-500 
-            w-fit p-5 rounded-lg absolute bottom-10 right-10
-            shadow-lg text-green-900 font-medium
-            animate-slide-fade
-          "
-        >
-          <p>Meuble ajouté avec succès !</p>
-        </div>
-      )}
     </section>
   );
 }
