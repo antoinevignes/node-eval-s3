@@ -25,8 +25,9 @@ export async function register(req, res) {
     });
 
     res.status(201).json({ message: "Utilisateur créé avec succès", user });
-  } catch (error) {
-    res.status(500).json({ message: err.message });
+  } catch (err) {
+    console.error("Erreur création utilisateur:", err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 }
 
@@ -56,7 +57,8 @@ export async function login(req, res) {
     );
 
     res.json({ message: "Connexion réussie", token });
-  } catch (error) {
-    res.status(500).json({ message: err.message });
+  } catch (err) {
+    console.error("Erreur connexion:", err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 }

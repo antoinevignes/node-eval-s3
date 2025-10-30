@@ -13,8 +13,8 @@ export async function getMaterialDetails(req, res) {
     const material = await Material.findById(id).populate("company_id");
 
     res.status(200).json(material);
-  } catch (error) {
-    console.error("Erreur récupération matériau:", error);
+  } catch (err) {
+    console.error("Erreur récupération matériau:", err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 }

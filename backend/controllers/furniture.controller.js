@@ -39,8 +39,8 @@ export async function addFurniture(req, res) {
     }
 
     res.status(201).json({ message: "Meuble et matériaux créés avec succès" });
-  } catch (error) {
-    console.error("Erreur création meuble:", error);
+  } catch (err) {
+    console.error("Erreur création meuble:", err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 }
@@ -188,8 +188,8 @@ export async function getFurnitureById(req, res) {
     }
 
     res.status(200).json(furniture[0]);
-  } catch (error) {
-    console.error("Erreur récupération meuble:", error);
+  } catch (err) {
+    console.error("Erreur récupération meuble:", err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 }

@@ -48,46 +48,11 @@ export async function getMaterialUsage(_, res) {
     ]);
 
     res.status(200).json(results);
-  } catch (error) {
-    console.error("Erreur récupération stat:", error);
+  } catch (err) {
+    console.error("Erreur récupération stat:", err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 }
-
-// export async function getMaterialUsageByType(_, res) {
-//   try {
-//     const results = await FurnitureMaterial.aggregate([
-//       {
-//         $lookup: {
-//           from: "materials",
-//           localField: "material_id",
-//           foreignField: "_id",
-//           as: "material",
-//         },
-//       },
-//       { $unwind: "$material" },
-//       {
-//         $group: {
-//           _id: "$material.type",
-//           totalUsed: { $sum: "$qty" },
-//         },
-//       },
-//       {
-//         $project: {
-//           _id: 0,
-//           type: "$_id",
-//           totalUsed: 1,
-//         },
-//       },
-//       { $sort: { totalUsed: -1 } },
-//     ]);
-
-//     res.status(200).json(results);
-//   } catch (error) {
-//     console.error("Erreur récupération stat:", error);
-//     res.status(500).json({ message: "Erreur serveur" });
-//   }
-// }
 
 export async function getMaterialUsageByCompany(_, res) {
   try {
@@ -141,8 +106,8 @@ export async function getMaterialUsageByCompany(_, res) {
     ]);
 
     res.status(200).json(results);
-  } catch (error) {
-    console.error("Erreur récupération stat:", error);
+  } catch (err) {
+    console.error("Erreur récupération stat:", err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 }
