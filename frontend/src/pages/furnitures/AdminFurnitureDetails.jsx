@@ -39,8 +39,6 @@ export default function AdminFurnitureDetails() {
     getFurnitureById();
   }, [API_URL, id, user]);
 
-  console.log(furniture);
-
   if (loading) {
     return (
       <section className="flex justify-center items-center h-[80vh] text-gray-500">
