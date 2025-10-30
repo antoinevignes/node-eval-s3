@@ -1,13 +1,23 @@
-import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export default function FurnitureList() {
   const API_URL = import.meta.env.VITE_API_URL;
-  const [searchParams] = useSearchParams();
   const [furnitures, setFurnitures] = useState([]);
   const [error, setError] = useState("");
 
-  const success = searchParams.get("success");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const shownToast = useRef(false);
+
+  useEffect(() => {
+    if (location.state?.success && !shownToast.current) {
+      shownToast.current = true;
+      toast.success("Connexion réussie !");
+      navigate("/", { replace: true, state: {} });
+    }
+  }, [location.state, navigate]);
 
   useEffect(() => {
     async function getFurnitures() {
@@ -94,19 +104,6 @@ export default function FurnitureList() {
           )}
         </div>
       </div>
-
-      {success && (
-        <div
-          className="
-            bg-green-300 border border-green-500 
-            w-fit p-5 rounded-lg absolute bottom-10 right-10
-            shadow-lg text-green-900 font-medium
-            animate-slide-fade
-          "
-        >
-          <p>Connecté !</p>
-        </div>
-      )}
     </section>
   );
 }

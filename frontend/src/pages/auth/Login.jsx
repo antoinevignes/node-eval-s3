@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { useSearchParams } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export default function Login() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { login } = useAuth();
-  const [searchParams] = useSearchParams();
-  const searchParamsErr = searchParams.get("error");
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const [error, setError] = useState(
-    searchParamsErr ? "Vous devez vous connecter pour continuer" : ""
-  );
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (location.state?.error) {
+      setError("Vous devez vous connecter pour continuer");
+    }
+  }, [location.state, navigate]);
 
   const handleSubmit = async (formData) => {
     const email = formData.get("email");

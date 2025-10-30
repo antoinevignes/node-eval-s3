@@ -23,7 +23,7 @@ export function AuthProvider({ children }) {
   const login = useCallback((token) => {
     localStorage.setItem("token", token);
     setUser(token);
-    navigate("/?success=true");
+    navigate("/", { state: { success: true } });
   }, []);
 
   const logout = useCallback(() => {
