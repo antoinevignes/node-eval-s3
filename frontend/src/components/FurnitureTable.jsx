@@ -32,8 +32,10 @@ export default function FurnitureTable() {
 
   // MAJ STATS & QTITE
   const updateQty = async (id, qty) => {
+    if (qty < 1) return;
+
     setFurnitures((prev) =>
-      prev.map((f) => (f._id === id ? { ...f, qty: Math.max(qty, 0) } : f))
+      prev.map((f) => (f._id === id ? { ...f, qty: Math.max(qty, 1) } : f))
     );
 
     try {
@@ -109,12 +111,17 @@ export default function FurnitureTable() {
                     <td className="px-6 py-4 text-right space-x-4">
                       <button
                         onClick={() => updateQty(f._id, f.qty - 1)}
-                        className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 transition"
+                        className="px-2 py-1 rounded transition 
+             bg-gray-200 hover:bg-gray-300
+             disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-200"
+                        disabled={f.qty === 1}
                       >
                         -
                       </button>
 
-                      <span className="min-w-8 text-center">{f.qty || 0}</span>
+                      <span className="inline-block w-12 text-center">
+                        {f.qty || 1}
+                      </span>
 
                       <button
                         onClick={() => updateQty(f._id, f.qty + 1)}
