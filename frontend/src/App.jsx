@@ -22,6 +22,10 @@ export default function App() {
           path="/admin/furniture/:id"
           element={<AdminFurnitureDetails />}
         />
+        <Route
+          path="/admin/furniture/:id"
+          element={<AdminFurnitureDetails />}
+        />
       </Route>
 
       <Route path="/user/login" element={<Login />} />
