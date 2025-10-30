@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 import { useSearchParams } from "react-router";
 
 export default function Login() {
   const API_URL = import.meta.env.VITE_API_URL;
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
   const [searchParams] = useSearchParams();
   const searchParamsErr = searchParams.get("error");
 

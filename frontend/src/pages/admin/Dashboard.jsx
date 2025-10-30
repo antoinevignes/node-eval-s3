@@ -1,5 +1,5 @@
-import { useContext, useEffect } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate, useSearchParams } from "react-router";
 import CompanyDonut from "../../components/charts/CompanyDonut";
 import { MaterialBarChart } from "../../components/charts/MaterialBarChart";
@@ -7,7 +7,7 @@ import FurnitureTable from "../../components/FurnitureTable";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { user, loading } = useContext(AuthContext);
+  const { user, loading } = useAuth();
   const [searchParams] = useSearchParams();
 
   const success = searchParams.get("success");

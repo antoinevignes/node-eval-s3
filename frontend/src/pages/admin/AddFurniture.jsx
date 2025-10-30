@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 
 const categories = [
@@ -19,7 +19,7 @@ const materials = [
 
 export default function AddFurniture() {
   const API_URL = import.meta.env.VITE_API_URL;
-  const { user, loading } = useContext(AuthContext);
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   const [error, setError] = useState("");

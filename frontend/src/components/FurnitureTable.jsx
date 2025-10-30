@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Eye } from "lucide-react";
 import { Link } from "react-router";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { useStats } from "../context/StatsContext";
 
 export default function FurnitureTable() {
   const API_URL = import.meta.env.VITE_API_URL;
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const { refreshStats } = useStats();
   const [furnitures, setFurnitures] = useState([]);
 

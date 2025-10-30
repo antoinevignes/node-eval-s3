@@ -1,4 +1,10 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useNavigate } from "react-router";
 
 export const AuthContext = createContext();
@@ -29,4 +35,8 @@ export function AuthProvider({ children }) {
   const values = { user, login, logout, loading };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  return useContext(AuthContext);
 }
