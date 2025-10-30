@@ -125,7 +125,7 @@ export default function FurnitureTable() {
                     </td>
 
                     <td className="px-6 py-4 flex items-center justify-end">
-                      <Link to={`/admin/${f._id}`}>
+                      <Link to={`/admin/furniture/${f._id}`}>
                         <Eye size={20} />
                       </Link>
                     </td>

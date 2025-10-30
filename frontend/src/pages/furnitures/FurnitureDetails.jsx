@@ -75,13 +75,13 @@ export default function FurnitureDetails() {
             Matériaux utilisés :
           </h2>
           <ul className="flex flex-wrap gap-3">
-            {furniture.materials?.map((m) => (
-              <li key={m._id}>
+            {furniture.materials?.map((m, idx) => (
+              <li key={idx}>
                 <Link
-                  to={`/material/${m._id}`}
+                  to={`/material/${m.material_id}`}
                   className="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-600 hover:text-white transition-all shadow-sm"
                 >
-                  {m.name}
+                  {m.material_name}
                 </Link>
               </li>
             ))}
