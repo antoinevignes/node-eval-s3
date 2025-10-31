@@ -29,7 +29,7 @@ export default function AddFurniture() {
 
   useEffect(() => {
     if (!user && !loading) {
-      navigate("/user/login?error=not-connected");
+      navigate("/user/login", { state: { error: true } });
     }
   }, [loading, user, navigate]);
 
