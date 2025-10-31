@@ -1,10 +1,20 @@
+import {
+  createFileRoute,
+  Link,
+  useLocation,
+  useParams,
+  useRouter,
+} from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
 
-export default function FurnitureDetails() {
+export const Route = createFileRoute("/furniture/$id")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const API_URL = import.meta.env.VITE_API_URL;
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams({ from: "/furniture/$id" });
+  const router = useRouter();
   const [furniture, setFurniture] = useState(null);
   const [error, setError] = useState("");
 
@@ -98,7 +108,7 @@ export default function FurnitureDetails() {
           </p>
 
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => router.history.back()}
             className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-all"
           >
             ← Retour

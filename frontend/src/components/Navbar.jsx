@@ -1,8 +1,10 @@
 import { Link } from "react-router";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "@tanstack/react-router";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <nav className="bg-white border-b border-gray-200 shadow-sm">
@@ -32,7 +34,10 @@ export default function Navbar() {
               </Link>
 
               <button
-                onClick={logout}
+                onClick={() => {
+                  logout();
+                  navigate({ to: "/", replace: true });
+                }}
                 className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 hover:text-gray-900 transition-all"
               >
                 Déconnexion

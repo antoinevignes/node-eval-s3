@@ -1,6 +1,6 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useAuth } from "../../../context/AuthContext";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router";
 
 const categories = [
   { id: "68ff4178c117aceec20a9300", name: "Armoires" },
@@ -17,7 +17,11 @@ const materials = [
   { id: "68ff4160c117aceec20a92fc", name: "Aluminium" },
 ];
 
-export default function AddFurniture() {
+export const Route = createFileRoute("/admin/furniture/add")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -29,7 +33,7 @@ export default function AddFurniture() {
 
   useEffect(() => {
     if (!user && !loading) {
-      navigate("/user/login?error=not-connected");
+      navigate({ to: "/user/login", state: { error: true } });
     }
   }, [loading, user, navigate]);
 
@@ -58,7 +62,7 @@ export default function AddFurniture() {
         throw new Error(err.message);
       }
 
-      navigate("/admin/dashboard", { state: { success: true } });
+      navigate({ to: "/admin/dashboard", state: { success: true } });
     } catch (err) {
       console.error("Erreur ajout du meuble:", err);
       setError(err.message || "Erreur serveur");

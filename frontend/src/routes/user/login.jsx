@@ -1,13 +1,20 @@
-import { useEffect, useState } from "react";
+import {
+  createFileRoute,
+  useLocation,
+  useNavigate,
+} from "@tanstack/react-router";
 import { useAuth } from "../../context/AuthContext";
-import { useLocation, useNavigate } from "react-router";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
-export default function Login() {
+export const Route = createFileRoute("/user/login")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { login } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [error, setError] = useState("");
 
@@ -15,7 +22,7 @@ export default function Login() {
     if (location.state?.error) {
       setError("Vous devez vous connecter pour continuer");
     }
-  }, [location.state, navigate]);
+  }, []);
 
   const handleSubmit = async (formData) => {
     const email = formData.get("email");
@@ -36,6 +43,7 @@ export default function Login() {
       const data = await response.json();
       login(data.token);
       setError("");
+      navigate({ to: "/", state: { success: true }, replace: true });
     } catch (err) {
       console.error(err);
       setError(err.message || "Erreur serveur");

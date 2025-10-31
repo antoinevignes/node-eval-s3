@@ -1,12 +1,23 @@
+import {
+  createFileRoute,
+  Link,
+  useNavigate,
+  useParams,
+  useRouter,
+} from "@tanstack/react-router";
+import { useAuth } from "../../../context/AuthContext";
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router";
-import { useAuth } from "../../context/AuthContext";
 
-export default function AdminFurnitureDetails() {
+export const Route = createFileRoute("/admin/furniture/$id")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const API_URL = import.meta.env.VITE_API_URL;
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id } = useParams({ from: "/admin/furniture/$id" });
   const { user } = useAuth();
+  const router = useRouter();
+  const navigate = useNavigate();
 
   const [furniture, setFurniture] = useState(null);
   const [error, setError] = useState("");
@@ -150,7 +161,7 @@ export default function AdminFurnitureDetails() {
           </p>
 
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => router.history.back()}
             className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-all"
           >
             ← Retour

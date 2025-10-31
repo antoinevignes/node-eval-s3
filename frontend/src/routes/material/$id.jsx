@@ -1,10 +1,14 @@
+import { createFileRoute, useParams, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
 
-export default function MaterialDetail() {
+export const Route = createFileRoute("/material/$id")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const API_URL = import.meta.env.VITE_API_URL;
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const router = useRouter();
+  const { id } = useParams({ from: "/material/$id" });
   const [material, setMaterial] = useState(null);
   const [error, setError] = useState("");
 
@@ -87,7 +91,7 @@ export default function MaterialDetail() {
 
         <div className="pt-6 border-t border-gray-100 text-sm text-gray-500 text-right">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => router.history.back()}
             className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-all"
           >
             ← Retour

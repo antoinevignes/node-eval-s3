@@ -1,8 +1,17 @@
+import {
+  createFileRoute,
+  Link,
+  useLocation,
+  useNavigate,
+} from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 
-export default function FurnitureList() {
+export const Route = createFileRoute("/")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const API_URL = import.meta.env.VITE_API_URL;
   const [furnitures, setFurnitures] = useState([]);
   const [error, setError] = useState("");
@@ -15,7 +24,7 @@ export default function FurnitureList() {
     if (location.state?.success && !shownToast.current) {
       shownToast.current = true;
       toast.success("Connexion réussie !");
-      navigate("/", { replace: true, state: {} });
+      navigate({ to: "/", replace: true, state: {} });
     }
   }, [location.state, navigate]);
 
