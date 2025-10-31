@@ -58,7 +58,6 @@ function RouteComponent() {
     }
   }, [loading, user, navigate]);
 
-  // Toaster
   useEffect(() => {
     if (location.state?.success && !shownToast.current) {
       shownToast.current = true;
