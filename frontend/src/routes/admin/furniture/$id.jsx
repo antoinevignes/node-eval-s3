@@ -1,78 +1,43 @@
 import {
   createFileRoute,
+  ErrorComponent,
   Link,
-  useNavigate,
-  useParams,
   useRouter,
 } from "@tanstack/react-router";
-import { useAuth } from "../../../context/AuthContext";
-import { useEffect, useState } from "react";
+
+async function getFurnitureById(id, user) {
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const response = await fetch(`${API_URL}/furniture/${id}`, {
+    headers: {
+      Authorization: `Bearer ${user}`,
+    },
+  });
+  if (!response.ok) throw new Error("Erreur serveur");
+
+  const data = await response.json();
+  return data;
+}
 
 export const Route = createFileRoute("/admin/furniture/$id")({
+  loader: ({ params: { id }, context }) => {
+    const { user } = context.auth;
+    return getFurnitureById(id, user);
+  },
+  errorComponent: ({ error }) => {
+    return <ErrorComponent error={error} />;
+  },
   component: RouteComponent,
+  pendingComponent: () => {
+    <section className="flex justify-center items-center h-[80vh] text-gray-500">
+      Chargement en cours...
+    </section>;
+  },
 });
 
 function RouteComponent() {
-  const API_URL = import.meta.env.VITE_API_URL;
-  const { id } = useParams({ from: "/admin/furniture/$id" });
-  const { user } = useAuth();
   const router = useRouter();
-  const navigate = useNavigate();
-
-  const [furniture, setFurniture] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function getFurnitureById() {
-      try {
-        const response = await fetch(`${API_URL}/furniture/${id}`, {
-          headers: {
-            Authorization: `Bearer ${user}`,
-          },
-        });
-
-        if (!response.ok) {
-          const err = await response.json();
-          throw new Error(err.message);
-        }
-
-        const data = await response.json();
-        setFurniture(data);
-      } catch (err) {
-        console.error("Erreur récupération meuble:", err);
-        setError(err.message || "Erreur serveur");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    getFurnitureById();
-  }, [API_URL, id, user]);
-
-  if (loading) {
-    return (
-      <section className="flex justify-center items-center h-[80vh] text-gray-500">
-        Chargement du meuble...
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className="flex justify-center items-center h-screen text-red-500">
-        <p>{error}</p>
-      </section>
-    );
-  }
-
-  if (!furniture) {
-    return (
-      <section className="flex justify-center items-center h-screen text-gray-500">
-        Meuble introuvable.
-      </section>
-    );
-  }
+  const furniture = Route.useLoaderData();
 
   return (
     <section className="min-h-[80vh] py-16 flex justify-center items-center bg-gray-50">

@@ -1,60 +1,36 @@
 import {
   createFileRoute,
+  ErrorComponent,
   Link,
-  useLocation,
-  useParams,
   useRouter,
 } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+
+async function getFurnitureById(id) {
+  const API_URL = import.meta.env.VITE_API_URL;
+  const response = await fetch(`${API_URL}/furniture/${id}`);
+
+  if (!response.ok) throw new Error("Erreur serveur");
+
+  const data = await response.json();
+  return data;
+}
 
 export const Route = createFileRoute("/furniture/$id")({
+  loader: ({ params: { id } }) => getFurnitureById(id),
+  errorComponent: ({ error }) => {
+    return <ErrorComponent error={error} />;
+  },
   component: RouteComponent,
+  pendingComponent: () => {
+    <section className="flex justify-center items-center h-[80vh] text-gray-500">
+      Chargement en cours...
+    </section>;
+  },
 });
 
 function RouteComponent() {
-  const API_URL = import.meta.env.VITE_API_URL;
-  const { id } = useParams({ from: "/furniture/$id" });
   const router = useRouter();
-  const [furniture, setFurniture] = useState(null);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    async function getFurnitureById() {
-      try {
-        const response = await fetch(`${API_URL}/furniture/${id}`);
-
-        if (!response.ok) {
-          const err = await response.json();
-          throw new Error(err.message);
-        }
-
-        const data = await response.json();
-        setFurniture(data);
-        setError("");
-      } catch (err) {
-        console.error("Erreur récupération détails meubles:", err);
-        setError(err.message || "Erreur serveur");
-      }
-    }
-
-    getFurnitureById();
-  }, [API_URL, id]);
-
-  if (error) {
-    return (
-      <section className="flex justify-center items-center h-screen text-red-500">
-        <p>{error}</p>
-      </section>
-    );
-  }
-
-  if (!furniture) {
-    return (
-      <section className="flex justify-center items-center h-[80vh] text-gray-500">
-        Chargement en cours...
-      </section>
-    );
-  }
+  const furniture = Route.useLoaderData();
 
   return (
     <section className="min-h-[80vh] py-16 flex justify-center items-center">

@@ -1,6 +1,6 @@
 import { ArcElement, Chart, Legend, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { useStats } from "../../context/StatsContext";
+import { getRouteApi } from "@tanstack/react-router";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -18,20 +18,21 @@ export const options = {
 };
 
 export default function CompanyDonut() {
-  const { companyStats, isRefreshing } = useStats();
+  const routeApi = getRouteApi("/admin/dashboard");
+  const { companyData } = routeApi.useLoaderData();
 
   const stats = {
-    labels: companyStats.map((obj) => obj.name),
+    labels: companyData.map((obj) => obj.name),
     datasets: [
       {
         label: "Matériaux",
-        data: companyStats.map((obj) => obj.totalMaterialsUsed),
+        data: companyData.map((obj) => obj.totalMaterialsUsed),
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
       },
     ],
   };
 
-  if (companyStats.length === 0) {
+  if (companyData.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-lg flex justify-center items-center p-10">
         <span className="px-6 py-6 text-center text-gray-500 italic">
@@ -43,11 +44,7 @@ export default function CompanyDonut() {
 
   return (
     <div className="bg-white rounded-lg shadow-lg flex justify-center items-center p-10">
-      {isRefreshing ? (
-        <p className="text-gray-500 italic">Mise à jour...</p>
-      ) : (
-        <Doughnut data={stats} options={options} />
-      )}
+      <Doughnut data={stats} options={options} />
     </div>
   );
 }

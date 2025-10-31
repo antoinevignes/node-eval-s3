@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Eye } from "lucide-react";
 import { Link } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { useStats } from "../context/StatsContext";
+import { useRouter } from "@tanstack/react-router";
 
 export default function FurnitureTable() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { user } = useAuth();
-  const { refreshStats } = useStats();
+  const router = useRouter();
   const [furnitures, setFurnitures] = useState([]);
 
   // FETCH INITIAL
@@ -52,7 +52,7 @@ export default function FurnitureTable() {
         throw new Error(err.message);
       }
 
-      refreshStats();
+      router.invalidate({ to: "/admin/dashboard" });
     } catch (err) {
       console.error("Erreur réseau:", err);
     }

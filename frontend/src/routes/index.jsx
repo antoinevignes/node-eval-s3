@@ -1,20 +1,33 @@
 import {
   createFileRoute,
+  ErrorComponent,
   Link,
   useLocation,
   useNavigate,
 } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
+async function getFurnitures() {
+  const API_URL = import.meta.env.VITE_API_URL;
+  const response = await fetch(`${API_URL}/furniture`);
+
+  if (!response.ok) throw new Error("Erreur serveur");
+
+  const data = await response.json();
+  return data;
+}
+
 export const Route = createFileRoute("/")({
+  loader: () => getFurnitures(),
+  errorComponent: ({ error }) => {
+    return <ErrorComponent error={error} />;
+  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const API_URL = import.meta.env.VITE_API_URL;
-  const [furnitures, setFurnitures] = useState([]);
-  const [error, setError] = useState("");
+  const furnitures = Route.useLoaderData();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,36 +40,6 @@ function RouteComponent() {
       navigate({ to: "/", replace: true, state: {} });
     }
   }, [location.state, navigate]);
-
-  useEffect(() => {
-    async function getFurnitures() {
-      try {
-        const response = await fetch(`${API_URL}/furniture`);
-
-        if (!response.ok) {
-          const err = await response.json();
-          throw new Error(err.message);
-        }
-
-        const data = await response.json();
-        setFurnitures(data);
-        setError("");
-      } catch (err) {
-        console.error("Erreur récupération liste meubles:", err);
-        setError(err.message || "Erreur serveur");
-      }
-    }
-
-    getFurnitures();
-  }, [API_URL]);
-
-  if (error) {
-    return (
-      <section className="flex justify-center items-center h-screen text-red-500">
-        <p>{error}</p>
-      </section>
-    );
-  }
 
   return (
     <section className="py-16">

@@ -8,7 +8,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { useStats } from "../../context/StatsContext";
+import { getRouteApi } from "@tanstack/react-router";
 
 ChartJS.register(
   CategoryScale,
@@ -33,20 +33,21 @@ export const options = {
 };
 
 export function MaterialBarChart() {
-  const { materialStats } = useStats();
+  const routeApi = getRouteApi("/admin/dashboard");
+  const { materialData } = routeApi.useLoaderData();
 
   const stats = {
-    labels: materialStats.map((obj) => obj.name),
+    labels: materialData.map((obj) => obj.name),
     datasets: [
       {
         label: "Matériaux",
-        data: materialStats.map((obj) => obj.totalUsed),
+        data: materialData.map((obj) => obj.totalUsed),
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
     ],
   };
 
-  if (materialStats.length === 0) {
+  if (materialData.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-lg flex justify-center items-center p-10 col-span-2">
         <span className="px-6 py-6 text-center text-gray-500 italic">
